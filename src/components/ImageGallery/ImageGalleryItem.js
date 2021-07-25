@@ -1,19 +1,18 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import s from "./ImageGallery.module.css";
 
 
-const ImageGalleryItem = ({ imageId, smallImg, tags, modalImg, onModalClick }) => {
+const ImageGalleryItem = ({ smallImg, modalImg, tags, onModalClick }) => {
     return (
         <img className={s.galleryImage} src={smallImg} alt={tags}
-            onClick={({ modalImg, tags }) => onModalClick(modalImg, tags)}
+            onClick={() => onModalClick(modalImg, tags)}
         />
     );
 };
 
-// ImageGalleryItem.propTypes = {
-//     imageId: pt
-//     smallImg: 
-// }
+ImageGalleryItem.propTypes = {
+    onModalClick: PropTypes.func.isRequired, 
+}
 
 export default ImageGalleryItem;

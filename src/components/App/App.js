@@ -9,9 +9,12 @@ import Loader from "../Loader";
 import Modal from "../Modal";
 
 export default class App extends Component {
+
   state = {
     images: [],
     query: "",
+    modalImg: '',
+    tags: '',
     page: 1,
     visible: false,
     modalShow: false,
@@ -34,7 +37,7 @@ export default class App extends Component {
           images: [...prevState.images, ...mapper(hits)],
         }))
       )
-      .catch((error) => console.log("error", error)).finally(() => this.setState({ visible:false}));
+      .catch((error) => console.log("error", error)).finally(() => this.setState({ visible: false }));
   };
 
   reset = () => {
@@ -54,12 +57,12 @@ export default class App extends Component {
     this.setState((prevState) => ({ page: prevState.page + 1 }));
   };
 
-  toggleModal = () => {
-    this.setState(({ modalShow }) => ({ modalShow: !modalShow }));
+  toggleModal = (modalImg, tags) => {
+    this.setState(({ modalShow }) => ({ modalShow: !modalShow, modalImg, tags }));
   };
 
   render() {
-    const { images, visible, modalShow } = this.state;
+    const { images, visible, modalShow, modalImg, tags } = this.state;
     return (
       <>
         <SearchBar onSubmit={this.handleSubmit} />
@@ -69,8 +72,8 @@ export default class App extends Component {
           {images.length >= 12 && <Button onLoadMore={this.handleNextPage} />}
         </Section>
         {modalShow && <Modal onClose={this.toggleModal}
-          // modalImg={""}
-          // tags={"dsd"} 
+          modalImg={modalImg}
+          tags={tags} 
           />
         }
       </>

@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import s from "./Modal.module.css";
 
-// const Modal = ({ modalImg, tags }) => (
-//     <div className={s.overlay}>
-//         <div className={s.modal}>
-//             <img src={modalImg} alt={tags} />
-//         </div>
-//     </div>
-// );
-
-// export default Modal;
 const modalRoot = document.querySelector('#modal');
 
 export default class Modal extends Component {
-    state = {
-        modalImg: '',
-        tags: ""
-    };
+    static propTypes = {
+        onClose: PropTypes.func.isRequired,
+    }
+    
+    // state = {
+    //     modalImg: '',
+    //     tags: ""
+    // };
 
     componentDidMount() {
         window.addEventListener('keydown', this.modalClose);
@@ -42,10 +38,11 @@ export default class Modal extends Component {
     };
 
     render() {
-        const { modalImg, tags } = this.state;
-        return createPortal(<div className={s.overlay} onClick={this.handleBackdropClick}>
+        // const { modalImg, tags } = this.props;
+        return createPortal(
+            <div className={s.overlay} onClick={this.handleBackdropClick}>
                 <div className={s.modal}>
-                    <img src={modalImg} alt={tags} />
+                    <img src={this.props.modalImg} alt={this.props.tags} />
                 </div>
             </div>, modalRoot)
     }

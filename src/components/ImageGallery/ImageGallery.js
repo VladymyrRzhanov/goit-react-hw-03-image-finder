@@ -9,7 +9,7 @@ const ImageGallery = ({ images, onModalOpen }) => (
             <li className={s.item} key={imageId}>
             
             
-                <ImageGallerryItem imageId={imageId} smallImg={smallImg} tags={tags} modalImg={modalImg} onModalClick={onModalOpen} />
+                <ImageGallerryItem smallImg={smallImg} tags={tags} modalImg={modalImg} onModalClick={onModalOpen} />
     
             </li>
         )}
@@ -20,7 +20,10 @@ ImageGallery.propTypes = {
     images: PropTypes.arrayOf(PropTypes.shape({
         imageId: PropTypes.number.isRequired,
         smallImg: PropTypes.string.isRequired,
-    }),)
+        modalImg: PropTypes.string.isRequired,
+        tags: PropTypes.string.isRequired,
+    }).isRequired).isRequired,
+    onModalOpen: PropTypes.func.isRequired,
 }
 
 export default ImageGallery;
