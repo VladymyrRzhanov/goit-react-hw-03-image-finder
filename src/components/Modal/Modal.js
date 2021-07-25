@@ -38,7 +38,6 @@ export default class Modal extends Component {
     };
 
     render() {
-        // const { modalImg, tags } = this.props;
         return createPortal(
             <div className={s.overlay} onClick={this.handleBackdropClick}>
                 <div className={s.modal}>

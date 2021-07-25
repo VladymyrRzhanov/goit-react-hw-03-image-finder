@@ -26,18 +26,24 @@ export default class App extends Component {
     if (query !== prevState.query || page !== prevState.page) {
       this.fetchImages(query, page);
     };
+    
   };
 
   fetchImages = (query, page) => {
     this.setState({ visible: true });
     imageApi
       .fetchImg(query, page)
-      .then(({ data: { hits } }) =>
+      .then(({ data: { hits } }) => {
         this.setState((prevState) => ({
           images: [...prevState.images, ...mapper(hits)],
         }))
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
       )
-      .catch((error) => console.log("error", error)).finally(() => this.setState({ visible: false }));
+      .catch((error) => console.log("error", error)).finally(() => this.setState({ visible: false }))
   };
 
   reset = () => {
