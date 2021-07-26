@@ -159,7 +159,7 @@ export default class App extends Component {
   //           images={images}
   //           onModalOpen={this.toggleModal}
   //         />
-  //         {(images.length % 12 === 0 && images.length!==0) &&
+  //         {(images.length % 12 === 0 && !!images.length) &&
   //           <Button
   //             onLoadMore={this.handleNextPage}
   //           />}
@@ -220,7 +220,7 @@ export default class App extends Component {
   //               images={images}
   //               onModalOpen={this.toggleModal}
   //             />
-  //             {(images.length % 12 === 0 && images.length!==0) &&
+  //             {(images.length % 12 === 0 && !!images.length) &&
   //               <Button
   //                 onLoadMore={this.handleNextPage}
   //               />
