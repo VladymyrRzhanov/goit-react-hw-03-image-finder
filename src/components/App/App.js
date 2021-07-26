@@ -78,7 +78,9 @@ export default class App extends Component {
         <Section>
           {
             error &&
-            <h2>{error.message}</h2>
+            <h2>
+              {error.message}
+            </h2>
           }
           {
             !!images.length &&
@@ -92,7 +94,7 @@ export default class App extends Component {
             <Loader />
           }
           {
-            !!images.length &&
+            (images.length % 12===0 && !!images.length) &&
             <Button
               onLoadMore={this.handleNextPage}
             />
