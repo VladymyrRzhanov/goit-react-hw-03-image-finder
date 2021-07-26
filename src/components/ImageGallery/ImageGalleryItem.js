@@ -15,6 +15,9 @@ const ImageGalleryItem = ({ smallImg, modalImg, tags, onModalClick }) => {
 };
 
 ImageGalleryItem.propTypes = {
+    smallImg: PropTypes.string.isRequired,
+        modalImg: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
     onModalClick: PropTypes.func.isRequired,
 };
 

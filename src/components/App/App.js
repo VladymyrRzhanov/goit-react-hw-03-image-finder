@@ -35,7 +35,7 @@ export default class App extends Component {
   };
 
   fetchImages = (query, page) => {
-    this.setState({ status:'pending' });
+    this.setState({ loading: true, status: 'pending' });
     imageApi
       .fetchImg(query, page)
       .then(({ data: { hits } }) => {
@@ -45,6 +45,7 @@ export default class App extends Component {
       }
       )
       .catch((error) => this.setState({ error, status: 'rejected' }))
+    .finally(() => this.setState({ loading: false }));
   };
 
   reset = () => {
@@ -72,59 +73,52 @@ export default class App extends Component {
 
 // ------------------------------------------------ Вариант 1 ------------------------------------------------------
   
-                                              //  Сделал три варианта ( надеюсь правильно))) ). Как лучше/правильно ?
-  
-  
+                                            
   render() {
-    const { images, status, modalShow, modalImg, tags, error } = this.state;
+    const { images, loading, modalShow, modalImg, tags, error } = this.state;
+
     return (
       <>
         <SearchBar
           onSubmit={this.handleSubmit}
         />
         <Section>
-          {(status === 'pending') &&
-            <>
-              <ImageGallery
-                images={images}
-                onModalOpen={this.toggleModal}
-              />
-              <Loader />
-            </>
-          }
-
           {
-            (status === "rejected") &&
+            error &&
             <h2>
               {error.message}
             </h2>
           }
-
-          {(status === 'resolved') &&
-            <>
-              <ImageGallery
-                images={images}
-                onModalOpen={this.toggleModal}
-              />
-              {(images.length % 12 === 0) &&
-                <Button
-                  onLoadMore={this.handleNextPage}
-                />
-              }
-              {
-                modalShow &&
-                <Modal
-                  onClose={this.toggleModal}
-                  modalImg={modalImg}
-                  tags={tags}
-                />
-              }
-            </>
+          {
+            !!images.length &&
+            <ImageGallery
+              images={images}
+              onModalOpen={this.toggleModal}
+            />
+          }
+          {
+            loading &&
+            <Loader />
+          }
+          {
+            (images.length % 12===0 && !!images.length) &&
+            <Button
+              onLoadMore={this.handleNextPage}
+            />
           }
         </Section>
+        {
+          modalShow &&
+          <Modal
+            onClose={this.toggleModal}
+            modalImg={modalImg}
+            tags={tags}
+          />
+        }
       </>
-    )
+    );
   };
+  
 
 
 // ------------------------------------------Вариант 2----------------------------------------------------
@@ -165,7 +159,7 @@ export default class App extends Component {
   //           images={images}
   //           onModalOpen={this.toggleModal}
   //         />
-  //         {(images.length % 12 === 0) &&
+  //         {(images.length % 12 === 0 && images.length!==0) &&
   //           <Button
   //             onLoadMore={this.handleNextPage}
   //           />}
@@ -195,49 +189,55 @@ export default class App extends Component {
     
 
 // ------------------------------ Вариант 3-------------------------------------------
-
 // render() {
-    // const { images, loading, modalShow, modalImg, tags, error } = this.state;
+  //   const { images, status, modalShow, modalImg, tags, error } = this.state;
+  //   return (
+  //     <>
+  //       <SearchBar
+  //         onSubmit={this.handleSubmit}
+  //       />
+  //       <Section>
+  //         {(status === 'pending') &&
+  //           <>
+  //             <ImageGallery
+  //               images={images}
+  //               onModalOpen={this.toggleModal}
+  //             />
+  //             <Loader />
+  //           </>
+  //         }
 
-    // return (
-    //   <>
-    //     <SearchBar
-    //       onSubmit={this.handleSubmit}
-    //     />
-    //     <Section>
-    //       {
-    //         error &&
-    //         <h2>
-    //           {error.message}
-    //         </h2>
-    //       }
-    //       {
-    //         !!images.length &&
-    //         <ImageGallery
-    //           images={images}
-    //           onModalOpen={this.toggleModal}
-    //         />
-    //       }
-    //       {
-    //         loading &&
-    //         <Loader />
-    //       }
-    //       {
-    //         (images.length % 12===0 && !!images.length) &&
-    //         <Button
-    //           onLoadMore={this.handleNextPage}
-    //         />
-    //       }
-    //     </Section>
-    //     {
-    //       modalShow &&
-    //       <Modal
-    //         onClose={this.toggleModal}
-    //         modalImg={modalImg}
-    //         tags={tags}
-    //       />
-    //     }
-    //   </>
-    // );
+  //         {
+  //           (status === "rejected") &&
+  //           <h2>
+  //             {error.message}
+  //           </h2>
+  //         }
+
+  //         {(status === 'resolved') &&
+  //           <>
+  //             <ImageGallery
+  //               images={images}
+  //               onModalOpen={this.toggleModal}
+  //             />
+  //             {(images.length % 12 === 0 && images.length!==0) &&
+  //               <Button
+  //                 onLoadMore={this.handleNextPage}
+  //               />
+  //             }
+  //             {
+  //               modalShow &&
+  //               <Modal
+  //                 onClose={this.toggleModal}
+  //                 modalImg={modalImg}
+  //                 tags={tags}
+  //               />
+  //             }
+  //           </>
+  //         }
+  //       </Section>
+  //     </>
+  //   )
   // };
+
 };
