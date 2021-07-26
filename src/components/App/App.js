@@ -16,8 +16,9 @@ export default class App extends Component {
     modalImg: '',
     tags: '',
     page: 1,
-    visible: false,
+    loading: false,
     modalShow: false,
+    error: ''
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -26,24 +27,24 @@ export default class App extends Component {
     if (query !== prevState.query || page !== prevState.page) {
       this.fetchImages(query, page);
     };
-    
+    window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
   };
 
   fetchImages = (query, page) => {
-    this.setState({ visible: true });
+    this.setState({ loading: true });
     imageApi
       .fetchImg(query, page)
       .then(({ data: { hits } }) => {
         this.setState((prevState) => ({
           images: [...prevState.images, ...mapper(hits)],
-        }))
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: 'smooth',
-        });
+        }));
       }
       )
-      .catch((error) => console.log("error", error)).finally(() => this.setState({ visible: false }))
+      .catch((error) => this.setState({error}))
+      .finally(() => this.setState({ loading: false }));
   };
 
   reset = () => {
@@ -54,9 +55,9 @@ export default class App extends Component {
     });
   };
 
-  handleSubmit = (query) => {
+  handleSubmit = query => {
     this.reset();
-    this.setState({ query: query });
+    this.setState({ query });
   };
 
   handleNextPage = () => {
@@ -68,21 +69,44 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, visible, modalShow, modalImg, tags } = this.state;
+    const { images, loading, modalShow, modalImg, tags, error } = this.state;
     return (
       <>
-        <SearchBar onSubmit={this.handleSubmit} />
+        <SearchBar
+          onSubmit={this.handleSubmit}
+        />
         <Section>
-          {!!images.length && <ImageGallery images={images} onModalOpen={this.toggleModal} />}
-          {visible && <Loader />}
-          {images.length >= 12 && <Button onLoadMore={this.handleNextPage} />}
+          {
+            error &&
+            <h2>{error.message}</h2>
+          }
+          {
+            !!images.length &&
+            <ImageGallery
+              images={images}
+              onModalOpen={this.toggleModal}
+            />
+          }
+          {
+            loading &&
+            <Loader />
+          }
+          {
+            !!images.length &&
+            <Button
+              onLoadMore={this.handleNextPage}
+            />
+          }
         </Section>
-        {modalShow && <Modal onClose={this.toggleModal}
-          modalImg={modalImg}
-          tags={tags} 
+        {
+          modalShow &&
+          <Modal
+            onClose={this.toggleModal}
+            modalImg={modalImg}
+            tags={tags}
           />
         }
       </>
-    )
-  }
-}
+    );
+  };
+};

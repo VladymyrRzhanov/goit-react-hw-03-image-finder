@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import s from "./SearchBar.module.css";
 
 export default class SearchBar extends Component {
+
     static propTypes = {
         onSubmit: PropTypes.func.isRequired,
-    }
+    };
 
     state = {
-        value:'',
-    }
+        value: '',
+    };
 
 
     handleChangeInput = ({currentTarget: {value}}) => {
@@ -22,18 +23,30 @@ export default class SearchBar extends Component {
         e.preventDefault();
         if (value.trim()) {
             onSubmit(value);
-            this.setState({ value: '' })
-        }
-    }
+            this.setState({ value: '' });
+        };
+    };
 
     render() {
         return (
-            <header className={s.searchBar}>
-                <form className={s.searchForm} onSubmit={this.handleSubmit}>
-                    <button className={s.searchButton} type='submit'>
-                        <span className={s.buttonLabel}>Search</span>
+            <header
+                className={s.searchBar}
+            >
+                <form
+                    className={s.searchForm}
+                    onSubmit={this.handleSubmit}
+                >
+                    <button
+                        className={s.searchButton}
+                        type='submit'
+                    >
+                        <span
+                            className={s.buttonLabel}>
+                            Search
+                        </span>
                     </button>
-                    <input className={s.formInput}
+                    <input
+                        className={s.formInput}
                         type='text'
                         autoComplete="off"
                         autoFocus
@@ -42,6 +55,6 @@ export default class SearchBar extends Component {
                     />
                 </form>
             </header>
-        )
-    }
-}
+        );
+    };
+};
